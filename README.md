@@ -26,6 +26,11 @@ An example of `MacPorts`:
 + `sudo port install graphicsmagick`
 + `export PKG_CONFIG_PATH=/opt/local/lib/pkgconfig`
 
+An example of `Homebrew`:
++ `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
++ `brew install pkg-config`
++ `brew install graphicsmagick`
+
 
 ### CentOS
 
@@ -77,11 +82,11 @@ func main() {
 ====================================================
 ## Todo List
 
-
 - [x] CloneMagickWand
 - [x] ClonePixelWand
 - [ ] ClonePixelWands
 - [ ] CopyMagickString
+- [x] Dissiove
 - [x] DestroyMagickWand
 - [x] DestroyPixelWand
 - [ ] FormatMagickString
@@ -93,6 +98,7 @@ func main() {
 - [x] MagickAnimateImages 
 - [x] MagickAnnotateImage
 - [x] MagickAppendImages
+- [x] MagickAutoOrientImage
 - [x] MagickAverageImages
 - [x] MagickBlackThresholdImage
 - [x] MagickBlurImage 
@@ -280,9 +286,10 @@ func main() {
 - [x] MagickGetImageInterlaceScheme 
 - [x] MagickGetImageIterations 
 - [ ] MagickGetImageMatte 
-- [x] MagickGetImageMatteColor 
+- [x] MagickGetImageMatteColor
+- [x] MagickGetImageOrientation
 - [x] MagickGetImagePage 
-- [ ] MagickGetImagePixels 
+- [x] MagickGetImagePixels
 - [ ] MagickGetImageProfile 
 - [x] MagickGetImageRedPrimary 
 - [ ] MagickGetImageRenderingIntent 
@@ -382,9 +389,9 @@ func main() {
 - [x] MagickSetImageIterations
 - [x] MagickSetImageMatte
 - [x] MagickSetImageMatteColor
-- [ ] MagickSetImageOption
+- [x] MagickSetImageOption
 - [x] MagickSetImagePage
-- [ ] MagickSetImagePixels
+- [x] MagickSetImagePixels
 - [ ] MagickSetImageProfile
 - [x] MagickSetImageRedPrimary
 - [x] MagickSetImageRenderingIntent

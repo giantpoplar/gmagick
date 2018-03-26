@@ -1,24 +1,15 @@
 package gmagick
 
 import (
-	"sync"
 	"runtime"
+	"sync"
 	"sync/atomic"
 	"unsafe"
 )
 
 /*
 #include <wand/wand_api.h>
-struct FakeMagickWand
-{
-  char id[MaxTextExtent];
-  ExceptionInfo exception;
-  ImageInfo *image_info;
-  QuantizeInfo   *quantize_info;
-  Image    *image,    *images;
-  unsigned int iterator;
-  unsigned long signature;
-};
+#include "magick_wand.h"
 void draw_composite(DrawingWand *drawing_wand,
   const CompositeOperator composite_operator,const double x,const double y,
   const double width,const double height, MagickWand *wand) {

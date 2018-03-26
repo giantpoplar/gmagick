@@ -2,7 +2,7 @@ package gmagick
 
 /*
 #include <unistd.h>
-#include <wand/wand_api.h>
+#include "magick_wand.h"
 */
 import "C"
 
@@ -35,6 +35,10 @@ func NewMagickWand() *MagickWand {
 	return newMagickWand(C.NewMagickWand())
 }
 
+// Returns low level C MagickWand
+func (mw *MagickWand) CWand() *C.MagickWand {
+	return mw.mw
+}
 
 // Makes an exact copy of the MagickWand object
 func (mw *MagickWand) Clone() *MagickWand {
@@ -139,6 +143,15 @@ func (mw *MagickWand) AnnotateImage(drawingWand *DrawingWand, x, y, angle float6
 // stack them top-to-bottom.
 func (mw *MagickWand) AppendImages(topToBottom bool) *MagickWand {
 	return newMagickWand(C.MagickAppendImages(mw.mw, b2i(topToBottom)))
+}
+
+// adjusts the current image so that its orientation is suitable for viewing
+// (i.e. top-left orientation).
+//
+// currentOrientation: Current image orientation
+func (mw *MagickWand) AutoOrientImage(currentOrientation OrientationType) error {
+	ok := C.auto_orient_image(mw.mw, C.OrientationType(currentOrientation))
+	return mw.getLastErrorIfFailed(ok)
 }
 
 // Average a set of images
@@ -480,6 +493,11 @@ func (mw *MagickWand) GetImageAttribute(attributeName string) string {
 	return C.GoString(p)
 }
 
+// Returns the image orientation type
+func (mw *MagickWand) GetImageOrientation() OrientationType {
+	return OrientationType(C.get_image_orientation(mw.mw))
+}
+
 // Returns the image background color.
 func (mw *MagickWand) GetImageBackgroundColor() (bgColor *PixelWand, err error) {
 	cbgcolor := NewPixelWand()
@@ -671,6 +689,24 @@ func (mw *MagickWand) GetImagePage() (w, h uint, x, y int, err error) {
 	var cx, cy C.long
 	ok := C.MagickGetImagePage(mw.mw, &cw, &ch, &cx, &cy)
 	return uint(cw), uint(ch), int(cx), int(cy), mw.getLastErrorIfFailed(ok)
+}
+
+// extracts pixel data from an image
+//
+// xOffset, yOffset: offset (from top left) on base canvas image on which to composite image data
+//
+// columns, rows: dimensions of image
+//
+// pixelMap: ordering of the pixel array
+//
+// storageType: define the data type of the pixels. Float and double types are expected to be normalized [0..1] otherwise [0..MaxRGB]
+//
+// pixels: contain the pixel components as defined by pixelMap and storageType
+func (mw *MagickWand) GetImagePixels(xOffset, yOffset int, columns, rows uint, pixelMap string, storageType StorageType, pixels []byte) error {
+	cspixelMap := C.CString(pixelMap)
+	defer C.free(unsafe.Pointer(cspixelMap))
+	ok := C.MagickGetImagePixels(mw.mw, C.long(xOffset), C.long(yOffset), C.ulong(columns), C.ulong(rows), cspixelMap, C.StorageType(storageType), (*C.uchar)(unsafe.Pointer(&pixels[0])))
+	return mw.getLastErrorIfFailed(ok)
 }
 
 // Returns the chromaticy red primary point.
@@ -1476,9 +1512,41 @@ func (mw *MagickWand) SetImageMatteColor(matte *PixelWand) error {
 	return mw.getLastErrorIfFailed(ok)
 }
 
+// Associates one or options with a particular image format.
+// (.e.g SetImageOption("jpeg","preserve-settings","true").
+func (mw *MagickWand) SetImageOption(format, key, value string) error {
+	csformat := C.CString(format)
+	defer C.free(unsafe.Pointer(csformat))
+	cskey := C.CString(key)
+	defer C.free(unsafe.Pointer(cskey))
+	csvalue := C.CString(value)
+	defer C.free(unsafe.Pointer(csvalue))
+	ok := C.MagickSetImageOption(mw.mw, csformat, cskey, csvalue)
+	return mw.getLastErrorIfFailed(ok)
+}
+
 // Sets the page geometry of the image.
 func (mw *MagickWand) SetImagePage(width, height uint, x, y int) error {
 	ok := C.MagickSetImagePage(mw.mw, C.ulong(width), C.ulong(height), C.long(x), C.long(y))
+	return mw.getLastErrorIfFailed(ok)
+}
+
+// Sets pixel data in the image at the location you specify
+// (.e.g SetImagePixels(0,0,0,640,1,"RGB",CharPixel,pixels));
+//
+// xOffset, yOffset: offset (from top left) on base canvas image on which to composite image data
+//
+// columns, rows: dimensions of image
+//
+// pixelMap: ordering of the pixel array
+//
+// storageType: define the data type of the pixels. Float and double types are expected to be normalized [0..1] otherwise [0..MaxRGB]
+//
+// pixels: contain the pixel components as defined by pixelMap and storageType
+func (mw *MagickWand) SetImagePixels(xOffset, yOffset int, columns, rows uint, pixelMap string, storageType StorageType, pixels []byte) error {
+	cspixelMap := C.CString(pixelMap)
+	defer C.free(unsafe.Pointer(cspixelMap))
+	ok := C.MagickSetImagePixels(mw.mw, C.long(xOffset), C.long(yOffset), C.ulong(columns), C.ulong(rows), cspixelMap, C.StorageType(storageType), (*C.uchar)(unsafe.Pointer(&pixels[0])))
 	return mw.getLastErrorIfFailed(ok)
 }
 
@@ -1836,8 +1904,6 @@ func (mw *MagickWand) WriteImagesFile(out *os.File, adjoin bool) error {
 	return mw.getLastErrorIfFailed(ok)
 }
 
-
-
 // cfdopen returns a C-level FILE*. mode should be as described in fdopen(3).
 // Caller is responsible for closing the file when successfully returned,
 // via C.fclose()
@@ -1855,4 +1921,3 @@ func cfdopen(file *os.File, mode string) (*C.FILE, error) {
 
 	return cfile, nil
 }
-

@@ -1,6 +1,6 @@
 package gmagick
 
-import "github.com/gographics/gmagick/types"
+import "github.com/giantpoplar/gmagick/types"
 
 // Destroy instance of Destroyer
 // If GOGC=off you should call obj.Destroy() manually
