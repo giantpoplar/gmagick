@@ -16,10 +16,9 @@ unsigned int GMagickAutoOrientImage(MagickWand *wand, const OrientationType curr
     return 1;
 }
 
-
 GravityType GMagickGetImageGravity(MagickWand *wand) {
-    // MagickGetImageGravity is newly added in 1.3.29
-    #if MagickLibVersion >= 0x211800
+    // MagickGetImageGravity is available in 1.3.22
+    #if MagickLibVersion >= 0x171400
         return MagickGetImageGravity(wand);
     #endif
     return ForgetGravity;
