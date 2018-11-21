@@ -45,6 +45,9 @@ An example of `Homebrew`:
 
 + `go get github.com/gographics/gmagick`
 
+## Use GraphicsMagick and ImageMagick simultaneously
+
+GraphicsMagick must be recompiled with flag --enable-symbol-prefix
 
 ## Example
 
