@@ -8,7 +8,6 @@ import (
 )
 
 /*
-#include <wand/wand_api.h>
 #include "magick_wand.h"
 void draw_composite(DrawingWand *drawing_wand,
   const CompositeOperator composite_operator,const double x,const double y,

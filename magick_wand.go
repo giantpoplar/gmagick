@@ -2,6 +2,7 @@ package gmagick
 
 /*
 #include <unistd.h>
+#include <wand/magick_wand.h>
 #include "magick_wand.h"
 */
 import "C"
@@ -150,7 +151,7 @@ func (mw *MagickWand) AppendImages(topToBottom bool) *MagickWand {
 //
 // currentOrientation: Current image orientation
 func (mw *MagickWand) AutoOrientImage(currentOrientation OrientationType) error {
-	ok := C.auto_orient_image(mw.mw, C.OrientationType(currentOrientation))
+	ok := C.GMagickAutoOrientImage(mw.mw, C.OrientationType(currentOrientation))
 	return mw.getLastErrorIfFailed(ok)
 }
 
@@ -495,7 +496,7 @@ func (mw *MagickWand) GetImageAttribute(attributeName string) string {
 
 // Returns the image orientation type
 func (mw *MagickWand) GetImageOrientation() OrientationType {
-	return OrientationType(C.get_image_orientation(mw.mw))
+	return OrientationType(C.GMagickGetImageOrientation(mw.mw))
 }
 
 // Returns the image background color.
@@ -615,7 +616,7 @@ func (mw *MagickWand) MagickGetImageGeometry() string {
 
 // Gets the image gravity.
 func (mw *MagickWand) GetImageGravity() GravityType {
-	return GravityType(C.MagickGetImageGravity(mw.mw))
+	return GravityType(C.GMagickGetImageGravity(mw.mw))
 }
 
 // Gets the image at the current image index.

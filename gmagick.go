@@ -2,7 +2,7 @@ package gmagick
 
 /*
 #cgo !no_pkgconfig pkg-config: GraphicsMagickWand
-#include <wand/wand_api.h>
+#include <wand/magick_wand.h>
 #include "magick_initialization.h"
 */
 import "C"

@@ -1,7 +1,7 @@
 package gmagick
 
 /*
-#include <wand/wand_api.h>
+#include <wand/magick_wand.h>
 */
 import "C"
 

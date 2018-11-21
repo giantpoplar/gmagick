@@ -1,7 +1,7 @@
 #ifndef _GMAGICK_MAGICK_WAND_H
 #define _GMAGICK_MAGICK_WAND_H
 
-#include <wand/wand_api.h>
+#include <wand/magick_wand.h>
 
 struct FakeMagickWand
 {
@@ -14,7 +14,8 @@ struct FakeMagickWand
   unsigned long signature;
 };
 
-extern OrientationType get_image_orientation(MagickWand *);
-extern unsigned int auto_orient_image(MagickWand *, const OrientationType);
+extern OrientationType GMagickGetImageOrientation(MagickWand *);
+extern unsigned int GMagickAutoOrientImage(MagickWand *, const OrientationType);
+extern GravityType GMagickGetImageGravity(MagickWand *);
 
 #endif

@@ -1,15 +1,14 @@
 #include "magick_wand.h"
 
-OrientationType get_image_orientation(MagickWand *wand) {
-    OrientationType orientationType = UndefinedOrientation;
+OrientationType GMagickGetImageOrientation(MagickWand *wand) {
     // MagickGetImageOrientation is newly added in 1.3.26
     #if MagickLibVersion >= 0x191600
-    	orientationType = MagickGetImageOrientation(wand);
+    	return MagickGetImageOrientation(wand);
     #endif
-    return orientationType;
+    return UndefinedOrientation;
 }
 
-unsigned int auto_orient_image(MagickWand *wand, const OrientationType current_orientation) {
+unsigned int GMagickAutoOrientImage(MagickWand *wand, const OrientationType current_orientation) {
     // MagickAutoOrientImage is newly added in 1.3.26
     #if MagickLibVersion >= 0x191600
         return MagickAutoOrientImage(wand, current_orientation);
@@ -17,3 +16,11 @@ unsigned int auto_orient_image(MagickWand *wand, const OrientationType current_o
     return 1;
 }
 
+
+GravityType GMagickGetImageGravity(MagickWand *wand) {
+    // MagickGetImageGravity is newly added in 1.3.29
+    #if MagickLibVersion >= 0x211800
+        return MagickGetImageGravity(wand);
+    #endif
+    return ForgetGravity;
+}
