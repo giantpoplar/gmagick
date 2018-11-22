@@ -2,7 +2,7 @@
 
 ## Install `GraphicsMagick` libraries and header files
 
-### Windows
+#### Windows
 + Install [msys2-x86_64](http://www.msys2.org/)
 + In msys2 shell: 
 ```
@@ -19,7 +19,7 @@ set MAGICK_CODER_MODULE_PATH=<msys64>\mingw64\lib\GraphicsMagick-1.3.25\modules-
 ```
 (BTW: you should change `<msys64>` to your installation path of `msys2`)
 
-### MacOS
+#### MacOS
 Install `GraphicsMagick` using [Homebrew](https://brew.sh/) or [MacPorts](https://www.macports.org)    
 An example of `MacPorts`:
 
@@ -32,12 +32,12 @@ An example of `Homebrew`:
 + `brew install graphicsmagick`
 
 
-### CentOS
+#### CentOS
 
 + ensure `epel-release` was installed. ([help](https://pkgs.org/download/epel-release))
 + `yum install GraphicsMagick-devel`
 
-### Ubuntu
+#### Ubuntu
 
 + `sudo apt-get install libgraphicsmagick1-dev`
 
@@ -62,10 +62,9 @@ func resize(orig string, dest string) {
     mw := gmagick.NewMagickWand()
     defer mw.Destroy()
     mw.ReadImage(orig)
-    filter := gmagick.FILTER_LANCZOS
     w := mw.GetImageWidth()
     h := mw.GetImageHeight()
-    mw.ResizeImage(w/2, h/2, filter, 1)
+    mw.ResizeImage(w/2, h/2, gmagick.FILTER_LANCZOS, 1)
     mw.WriteImage(dest)
 }
 
@@ -73,9 +72,6 @@ func main() {
     f := flag.String("from", "", "original image file ...")
     t := flag.String("to", "", "target file ...")
     flag.Parse()
-
-    gmagick.Initialize()
-    defer gmagick.Terminate()
 
     resize(*f, *t)
 }
