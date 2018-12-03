@@ -3,6 +3,7 @@ package gmagick
 /*
 #include <unistd.h>
 #include <wand/magick_wand.h>
+#include <mcheck.h>
 #include "magick_wand.h"
 */
 import "C"
@@ -33,6 +34,7 @@ func newMagickWand(cmw *C.MagickWand) *MagickWand {
 
 // Returns a wand required for all other methods in the API. A fatal exception is thrown if there is not enough memory to allocate the wand.
 func NewMagickWand() *MagickWand {
+	C.mtrace()
 	return newMagickWand(C.NewMagickWand())
 }
 
