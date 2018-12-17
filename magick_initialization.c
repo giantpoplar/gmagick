@@ -109,11 +109,11 @@ void restoreSigactions() {
  in InitializeMagick, which will cause Go run-time panics not occur as expected.
 */
 void init_magick() {
-    saveSigactions();
+ //   saveSigactions();
 
     InitializeMagick(NULL);
 
-    restoreSigactions();
+ //   restoreSigactions();
 }
 #else
 /*

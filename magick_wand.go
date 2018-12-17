@@ -31,6 +31,11 @@ func newMagickWand(cmw *C.MagickWand) *MagickWand {
 	return mw
 }
 
+// NewMagickWand1 create a wrapper of C.MagickWand
+func NewMagickWand1(cmw *C.MagickWand) *MagickWand {
+	return newMagickWand(cmw)
+}
+
 // Returns a wand required for all other methods in the API. A fatal exception is thrown if there is not enough memory to allocate the wand.
 func NewMagickWand() *MagickWand {
 	return newMagickWand(C.NewMagickWand())
