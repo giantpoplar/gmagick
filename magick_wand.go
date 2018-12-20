@@ -17,6 +17,8 @@ import (
 	"unsafe"
 )
 
+type CMagickWand C.MagickWand
+
 // This struct represents the MagickWand C API of GraphicsMagick
 type MagickWand struct {
 	mw   *C.MagickWand
@@ -31,9 +33,10 @@ func newMagickWand(cmw *C.MagickWand) *MagickWand {
 	return mw
 }
 
+
 // NewMagickWand1 create a wrapper of C.MagickWand
-func NewMagickWand1(cmw *C.MagickWand) *MagickWand {
-	return newMagickWand(cmw)
+func NewMagickWand1(cmw *CMagickWand) *MagickWand {
+	return newMagickWand((*C.MagickWand)(cmw))
 }
 
 // Returns a wand required for all other methods in the API. A fatal exception is thrown if there is not enough memory to allocate the wand.
