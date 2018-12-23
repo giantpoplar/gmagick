@@ -498,7 +498,9 @@ func (mw *MagickWand) GetImageAttribute(attributeName string) string {
 	n := C.CString(attributeName)
 	defer C.free(unsafe.Pointer(n))
 	p := C.MagickGetImageAttribute(mw.mw, n)
-	defer C.MagickRelinquishMemory(unsafe.Pointer(p))
+	if p != nil {
+		defer C.MagickRelinquishMemory(unsafe.Pointer(p))
+	}
 	return C.GoString(p)
 }
 
